@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Roulette | วันนี้กินอะไรดี?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#f47b35;--orange-dark:#d95e1b;--cream:#fff8ed;--ink:#38251d;--muted:#826f63;--card:#fffdf9;--line:#f0e1d2}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:'Prompt',sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 15%,#ffe7c9 0,transparent 28%),radial-gradient(circle at 90% 80%,#ffe1cf 0,transparent 25%),var(--cream)}
+nav{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(6vw,24px);background:rgba(255,253,249,.86);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Kanit',sans-serif;font-size:1.35rem;font-weight:600;letter-spacing:-.3px}
+.logo-icon{width:42px;height:42px;border-radius:14px;background:var(--orange);display:grid;place-items:center;font-size:23px;box-shadow:0 7px 15px #f47b3533}
+.nav-right{font-size:.9rem;color:var(--muted)}
+.nav-pill{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:99px;background:#fff0df;color:var(--orange-dark);font-weight:500}
+main{max-width:1100px;margin:0 auto;padding:58px 24px 48px}
+.hero{text-align:center;margin-bottom:34px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:99px;font-size:.82rem;color:var(--orange-dark);font-weight:500}
+h1{font-family:'Kanit',sans-serif;font-size:clamp(2.25rem,5vw,4rem);line-height:1.12;margin:18px 0 12px;letter-spacing:-1px}
+h1 span{color:var(--orange)}
+.hero p{margin:0 auto;max-width:550px;line-height:1.8;color:var(--muted);font-size:1rem}
+.content{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);gap:24px;align-items:stretch}
+.food-card,.side-card{background:var(--card);border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:0 18px 55px #6b37100d}
+.food-image-wrap{height:310px;position:relative;overflow:hidden;background:#f7e6d4}
+.food-image{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.food-card:hover .food-image{transform:scale(1.025)}
+.image-label{position:absolute;left:18px;top:18px;padding:8px 13px;background:#fffdf0eF;border-radius:99px;font-size:.8rem;font-weight:500}
+.food-details{padding:26px 30px 30px}
+.food-top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.food-category{font-size:.78rem;color:var(--orange-dark);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+h2{font-family:'Kanit',sans-serif;font-size:2rem;margin:5px 0 8px;line-height:1.3}
+.food-desc{color:var(--muted);line-height:1.8;margin:0 0 22px}
+.price-box{background:#fff1e2;border-radius:16px;padding:11px 15px;text-align:right;white-space:nowrap}
+.price-label{display:block;color:var(--muted);font-size:.72rem}
+.price{font-family:'Kanit',sans-serif;color:var(--orange-dark);font-size:1.55rem;font-weight:600}
+.action-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:0}
+.random-btn{flex:1;min-width:190px;background:linear-gradient(135deg,var(--orange),#ff9b50);color:white;padding:15px 20px;border-radius:15px;font-weight:600;box-shadow:0 9px 20px #f47b3538;transition:transform .2s,box-shadow .2s}
+.random-btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px #f47b3545}
+.random-btn:active{transform:translateY(0)}
+.random-btn:disabled{opacity:.75;cursor:wait}
+.hint{font-size:.78rem;color:var(--muted);text-align:center;margin:13px 0 0}
+.side-card{padding:25px}
+.side-title{font-family:'Kanit',sans-serif;font-size:1.4rem;margin:0 0 4px}
+.side-subtitle{font-size:.85rem;color:var(--muted);margin:0 0 19px}
+.menu-list{display:grid;gap:10px}
+.menu-item{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid transparent;border-radius:15px;transition:background .2s,border-color .2s}
+.menu-item.active{background:#fff2e4;border-color:#f8d5b5}
+.menu-thumb{width:54px;height:54px;border-radius:12px;object-fit:cover;background:#f3dfcb;flex-shrink:0}
+.menu-text{min-width:0;flex:1}
+.menu-name{font-weight:500;font-size:.91rem}
+.menu-price{font-size:.82rem;color:var(--orange-dark);margin-top:3px}
+.menu-number{font-size:.75rem;color:#b5a195}
+footer{text-align:center;padding:8px 24px 35px;color:var(--muted);font-size:.82rem}
+footer span{color:var(--orange-dark)}
+@media(max-width:760px){nav{height:68px;padding:0 18px}.nav-right{font-size:.78rem}.nav-pill{padding:8px 10px}main{padding:40px 16px 32px}.content{grid-template-columns:1fr}.food-image-wrap{height:250px}.food-details{padding:22px}.side-card{padding:20px}.hero{margin-bottom:25px}}
+@media(max-width:400px){.logo{font-size:1.1rem}.nav-pill{font-size:.7rem}h2{font-size:1.65rem}.food-top{flex-direction:column}.price-box{text-align:left;padding:8px 12px}.price-box .price-label{display:inline;margin-right:6px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo"><div class="logo-icon">🍊</div><span>Food Roulette</span></div>
+  <div class="nav-right"><span class="nav-pill">✦ สุ่มเมนูวันนี้</span></div>
+</nav>
+<main>
+  <header class="hero">
+    <div class="eyebrow">🍽️ YOUR DAILY FOOD INSPIRATION</div>
+    <h1>วันนี้กิน<span>อะไรดี?</span></h1>
+    <p>หมดปัญหาคิดเมนูไม่ออก ให้เราช่วยเลือกมื้ออร่อยให้คุณ<br>กดสุ่ม แล้วปล่อยให้ความหิวเป็นเรื่องง่าย!</p>
+  </header>
+  <section class="content" aria-label="สุ่มเมนูอาหาร">
+    <article class="food-card">
+      <div class="food-image-wrap">
+        <img id="foodImage" class="food-image" src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=1200&q=85" alt="ข้าวผัดกุ้ง">
+        <div class="image-label">✨ เมนูแนะนำสำหรับคุณ</div>
+      </div>
+      <div class="food-details">
+        <div class="food-top">
+          <div>
+            <div class="food-category" id="foodCategory">THAI FAVORITE</div>
+            <h2 id="foodName">ข้าวผัดกุ้ง</h2>
+          </div>
+          <div class="price-box"><span class="price-label">ราคาโดยประมาณ</span><span class="price" id="foodPrice">฿ 65</span></div>
+        </div>
+        <p class="food-desc" id="foodDescription">ข้าวผัดหอมกระทะ คลุกเคล้ากับกุ้งเนื้อเด้ง เสิร์ฟพร้อมแตงกวาและมะนาว เมนูง่าย ๆ ที่อร่อยได้ทุกวัน</p>
+        <div class="action-row"><button class="random-btn" id="randomButton" type="button">🎲 สุ่มเมนูใหม่</button></div>
+        <p class="hint" id="hintText">มีเมนูให้เลือกทั้งหมด 6 รายการ · กดปุ่มเพื่อค้นพบเมนูถัดไป</p>
+      </div>
+    </article>
+    <aside class="side-card">
+      <h3 class="side-title">เมนูในวงล้อ 🍴</h3>
+      <p class="side-subtitle">ตัวเลือกอร่อย ๆ ที่รอให้คุณค้นพบ</p>
+      <div class="menu-list" id="menuList"></div>
+    </aside>
+  </section>
+</main>
+<footer>Made with <span>♥</span> for food lovers · Food Roulette © 2026</footer>
+<script>
+const foods = [
+  {name:"ข้าวผัดกุ้ง",category:"THAI FAVORITE",price:65,description:"ข้าวผัดหอมกระทะ คลุกเคล้ากับกุ้งเนื้อเด้ง เสิร์ฟพร้อมแตงกวาและมะนาว เมนูง่าย ๆ ที่อร่อยได้ทุกวัน",image:"https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=1200&q=85",alt:"ข้าวผัด"},
+  {name:"ผัดกะเพราไก่",category:"SPICY & TASTY",price:60,description:"กะเพราไก่ผัดไฟแรง หอมใบกะเพราและพริกกระเทียม ราดบนข้าวสวยร้อน ๆ เพิ่มไข่ดาวก็ยิ่งฟิน",image:"https://images.unsplash.com/photo-1567608285969-48e4bbe0d399?auto=format&fit=crop&w=1200&q=85",alt:"อาหารจานผัด"},
+  {name:"ราเมงญี่ปุ่น",category:"JAPANESE COMFORT",price:129,description:"เส้นราเมงเหนียวนุ่มในน้ำซุปเข้มข้น เสิร์ฟพร้อมไข่ต้ม หมูชาชู และต้นหอม เหมาะกับวันที่อยากกินอะไรอุ่น ๆ",image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=1200&q=85",alt:"ราเมงญี่ปุ่น"},
+  {name:"พิซซ่าชีส",category:"CHEESY MOOD",price:189,description:"พิซซ่าอบร้อน ๆ แป้งหอมกรอบด้านนอก ชีสเยิ้มเต็มคำ เหมาะสำหรับแบ่งกันกินกับเพื่อนหรือเป็นรางวัลให้ตัวเอง",image:"https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=85",alt:"พิซซ่าชีส"},
+  {name:"ส้มตำไทย",category:"FRESH & ZESTY",price:55,description:"มะละกอกรอบคลุกน้ำปรุงรสเปรี้ยวหวานเผ็ดกำลังดี โรยถั่วลิสงและกุ้งแห้ง กินคู่กับข้าวเหนียวก็เข้ากัน",image:"https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=1200&q=85",alt:"อาหารไทย"},
+  {name:"เบอร์เกอร์เนื้อ",category:"BURGER TIME",price:149,description:"เบอร์เกอร์เนื้อฉ่ำ ๆ ประกบผักสด ชีส และซอสสูตรเข้มข้น เสิร์ฟในขนมปังนุ่ม หอมอร่อยทุกคำ",image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=85",alt:"เบอร์เกอร์เนื้อ"}
+];
+let currentIndex = 0;
+const $ = id => document.getElementById(id);
+function renderMenuList(){
+  $("menuList").innerHTML = "";
+  foods.forEach((food,index)=>{
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "menu-item" + (index === currentIndex ? " active" : "");
+    item.setAttribute("aria-label",`เลือกเมนู${food.name}`);
+    item.innerHTML = `<img class="menu-thumb" src="${food.image}" alt="${food.alt}"><div class="menu-text"><div class="menu-name">${food.name}</div><div class="menu-price">฿ ${food.price}</div></div><span class="menu-number">0${index+1}</span>`;
+    item.addEventListener("click",()=>showFood(index));
+    $("menuList").appendChild(item);
+  });
+}
+function showFood(index){
+  currentIndex = index;
+  const food = foods[index];
+  $("foodImage").src = food.image;
+  $("foodImage").alt = food.alt;
+  $("foodCategory").textContent = food.category;
+  $("foodName").textContent = food.name;
+  $("foodPrice").textContent = `฿ ${food.price}`;
+  $("foodDescription").textContent = food.description;
+  $("hintText").textContent = `เมนูที่ ${index+1} จากทั้งหมด ${foods.length} รายการ`;
+  renderMenuList();
+}
+$("randomButton").addEventListener("click",()=>{
+  let nextIndex = currentIndex;
+  while(foods.length > 1 && nextIndex === currentIndex) nextIndex = Math.floor(Math.random()*foods.length);
+  showFood(nextIndex);
+});
+renderMenuList();
+</script>
+</body>
+</html>
